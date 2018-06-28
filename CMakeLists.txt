@@ -1,7 +1,8 @@
 PROJECT(towbot CXX)
 
-# Required for add_subdirectory() support.
-cmake_minimum_required(VERSION 3.11)
+# This is the lowest common denominator--lots of distributions should have at
+# least this version.
+cmake_minimum_required(VERSION 3.0)
 
 # Build the nested ArUco library.
 set(ARUCO_DIRECTORY "./aruco-3.0.10")

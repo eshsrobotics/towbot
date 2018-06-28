@@ -6,6 +6,25 @@
 # ./build folder.  None of those need to be versioned.
 build/*
 
+# ArUco generates these during its build.
+libaruco.so.*
+aruco.pc
+aruco-uninstalled.pc
+arucoConfig.cmake
+utils/aruco_batch_processing
+utils/aruco_print_dictionary
+utils/aruco_print_marker
+utils/aruco_simple
+utils/aruco_test
+utils/aruco_tracker
+utils_calibration/aruco_calibration
+utils_calibration/aruco_calibration_fromimages
+utils_markermap/aruco_create_markermap
+utils_markermap/aruco_markermap_pix2meters
+utils_markermap/aruco_simple_markermap
+utils_markermap/aruco_test_markermap
+utils_svm/aruco_test_svm
+
 # From https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore
 # ----------------------------------------------------------------------
 
@@ -50,7 +69,7 @@ CMakeFiles
 CMakeScripts
 Testing
 Makefile
-cmake_install.cmake
+**/cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
