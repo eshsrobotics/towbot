@@ -2,9 +2,9 @@
 
 # Custom ignores.
 # ---------------
-# When you run "cmake ./build", the temporary build artifacts are stored in the
-# ./build folder.  None of those need to be versioned.
-build/*
+# Ignore build artifacts.
+lib/
+bin/
 
 # ArUco generates these during its build.
 aruco-3.0.10/src/libaruco.so.*
