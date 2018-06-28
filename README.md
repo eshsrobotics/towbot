@@ -17,9 +17,17 @@ This is an extracurricular project that will help to sharpen the programming ski
 1. Install `cmake` by whatever means you prefer.
 1. To generate the `Makefile`, execute the following command from the
 project's base directory:
-    cmake ./build
-1. Build the actual code using the `Makefile`.  Note that it will actually build the nested `aruco` codebase, so it may take a while the first time it is run.
-    make
+    ``` shell
+    cmake .
+    ```
+    If you prefer an interactive configuration, use `ccmake .` or the
+    CMake-GUI instead.
+1. Build the actual code using the `Makefile`.  Note that it will actually
+   build the nested `aruco` codebase, so it may take a while the first time it
+   is run.
+   ``` shell
+   make
+   ```
 ### Python build instructions
 1. Install this project's local Python dependency packages as follows:
     pip3 install --user -r requirements.txt

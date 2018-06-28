@@ -7,23 +7,24 @@
 build/*
 
 # ArUco generates these during its build.
-libaruco.so.*
-aruco.pc
-aruco-uninstalled.pc
-arucoConfig.cmake
-utils/aruco_batch_processing
-utils/aruco_print_dictionary
-utils/aruco_print_marker
-utils/aruco_simple
-utils/aruco_test
-utils/aruco_tracker
-utils_calibration/aruco_calibration
-utils_calibration/aruco_calibration_fromimages
-utils_markermap/aruco_create_markermap
-utils_markermap/aruco_markermap_pix2meters
-utils_markermap/aruco_simple_markermap
-utils_markermap/aruco_test_markermap
-utils_svm/aruco_test_svm
+aruco-3.0.10/src/libaruco.so.*
+aruco-3.0.10/aruco.pc
+aruco-3.0.10/aruco-uninstalled.pc
+aruco-3.0.10/arucoConfig.cmake
+aruco-3.0.10/cmake_uninstall.cmake
+aruco-3.0.10/utils/aruco_batch_processing
+aruco-3.0.10/utils/aruco_print_dictionary
+aruco-3.0.10/utils/aruco_print_marker
+aruco-3.0.10/utils/aruco_simple
+aruco-3.0.10/utils/aruco_test
+aruco-3.0.10/utils/aruco_tracker
+aruco-3.0.10/utils_calibration/aruco_calibration
+aruco-3.0.10/utils_calibration/aruco_calibration_fromimages
+aruco-3.0.10/utils_markermap/aruco_create_markermap
+aruco-3.0.10/utils_markermap/aruco_markermap_pix2meters
+aruco-3.0.10/utils_markermap/aruco_simple_markermap
+aruco-3.0.10/utils_markermap/aruco_test_markermap
+aruco-3.0.10/utils_svm/aruco_test_svm
 
 # From https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore
 # ----------------------------------------------------------------------
