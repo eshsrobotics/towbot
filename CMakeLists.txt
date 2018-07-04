@@ -50,6 +50,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # Define our source file sets and target directories.
 # ---------------------------------------------------
 set(TEST_SOURCES "src/main.cpp")
+set(CALIBRATE_UTILITY_SOURCES "src/utils/camera_calibration.cpp")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${MY_LIBRARY_DIRECTORY}")    # Dynamic libraries
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${MY_LIBRARY_DIRECTORY}")    # Static libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${MY_EXECUTABLE_DIRECTORY}") # Executables
@@ -60,3 +61,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${MY_EXECUTABLE_DIRECTORY}") # Executables
 add_executable(camera-test ${TEST_SOURCES})
 target_link_libraries(camera-test ${OpenCV_LIBS})
 target_link_libraries(camera-test "aruco")
+
+add_executable(calibrate ${CALIBRATE_UTILITY_SOURCES})
+target_link_libraries(calibrate ${OpenCV_LIBS})
