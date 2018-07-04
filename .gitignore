@@ -12,6 +12,9 @@ aruco-3.0.10/aruco.pc
 aruco-3.0.10/aruco-uninstalled.pc
 aruco-3.0.10/arucoConfig.cmake
 aruco-3.0.10/cmake_uninstall.cmake
+aruco-3.0.10/doxy.config
+aruco-3.0.10/gu.tgf
+aruco-3.0.10/html
 aruco-3.0.10/utils/aruco_batch_processing
 aruco-3.0.10/utils/aruco_print_dictionary
 aruco-3.0.10/utils/aruco_print_marker
