@@ -4,6 +4,10 @@ PROJECT(towbot CXX)
 # least this version.
 cmake_minimum_required(VERSION 3.0)
 
+# Turn off win32 compilation for Cygwin.  Not doing so emits warnings during
+# Windows builds, and we don't need Win32 support anyway.
+set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
 # A nifty trick from https://stackoverflow.com/q/10851247 for forcing the
 # compiler to build against the C++11 standard.  It only supports g++ right
 # now.

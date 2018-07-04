@@ -15,8 +15,13 @@ This is an extracurricular project that will help to sharpen the programming ski
         brew install opencv
 ### C++ build instructions
 1. Install `cmake` by whatever means you prefer.
+1. ArUco has some optional dependencies that we don't strictly need:
+   1. `doxygen` -- needed only to run `make doc`, should you want to generate
+      local ArUco API documentation.
+   1. `libglut-devel` -- needed only to build some of ArUco's utility
+      programs.
 1. To generate the `Makefile`, execute the following command from the
-project's base directory:
+   project's base directory:
     ``` shell
     cmake .
     ```
