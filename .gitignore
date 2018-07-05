@@ -29,6 +29,9 @@ aruco-3.0.10/utils_markermap/aruco_simple_markermap
 aruco-3.0.10/utils_markermap/aruco_test_markermap
 aruco-3.0.10/utils_svm/aruco_test_svm
 
+# bin/calibrate generates this when run correctly.
+out_camera_data.xml
+
 # From https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore
 # ----------------------------------------------------------------------
 

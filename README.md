@@ -33,6 +33,27 @@ This is an extracurricular project that will help to sharpen the programming ski
    ``` shell
    make
    ```
+#### How to use the `calibrate` utility
+In addition to the other programs built by this project, you will find an
+OpenCV utility called `bin/calibrate`.  Its purpose is to analyze special
+**pattern images** taken from a camera, deduce the critical parameters needed
+to undo the camera's lens distortion, and write these parameters to an output
+file.  It can take its image data from a live camera feed, a recorded video
+file, or a series of photograph snapshots, depending on what its input XML
+file specifies.
+
+The `calibrate` program requires X (*which is somewhat nonsensical, given that
+X is only used to display intermediate image data--we may change this
+later*).  On Cygwin, you must install the `xorg-server` and `dbus` packages.
+
+To see how `calibrate` works in practice, try one of these commands:
+
+     bin/calibrate.exe samples/calibration/with-images/settings.xml
+
+The program will wait for keyboard input on the X display--just hit `space` or
+`enter`.  In the end, it will generate a file called `out_camera_data.xml`
+containing the calibration parameters.
+
 ### Python build instructions
 1. Install this project's local Python dependency packages as follows:
     pip3 install --user -r requirements.txt
