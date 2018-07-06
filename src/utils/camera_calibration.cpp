@@ -2,6 +2,7 @@
 #include <sstream>
 #include <time.h>
 #include <stdio.h>
+#include <getopt.h> // For GNU's getopt_long()
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -15,13 +16,36 @@
 using namespace cv;
 using namespace std;
 
-static void help()
-{
-    cout <<  "This is a camera calibration sample." << endl
-         <<  "Usage: calibration configurationFile"  << endl
-         <<  "Near the sample file you'll find the configuration file, which has detailed help of "
-             "how to edit it.  It may be any OpenCV supported file format XML/YAML." << endl;
+void briefUsage(const string& programName) {
+    cout << "Run '" << programName << " for more information.\n";
 }
+
+void usage(const char* programName) {
+    cout << "\n"
+         << "This is a camera configuration tool.  When it is given a configuration\n"
+         << "file, it can process the images that file points to and generate a\n"
+         << "camera parameter XML file.  These files are necessary in order to\n"
+         << "ensure that the ArUco library produces accurate results.\n"
+         << "\n"
+         << "Usage: " << programName << " [options] [configuration file]\n"
+         << "\n"
+         << "  Options:\n"
+         << "    -h, --help\n"
+         << "      Shows this help message.\n"
+         << "    -o FILE, --output=FILE\n"
+         << "      Writes the camera parameter XML to the given output file (by\n"
+         << "      default, it is printed to stdout.)\n"
+         << "    -g, --graphics\n"
+         << "      Enable graphical display of intermediate images.\n"
+         << "      This requires an X server.\n"
+         << "\n"
+         << "  The configuration file is an XML or YML file in an OpenCV-supported\n"
+         << "  format.  You can find working examples in this repository's\n"
+         << "  samples/calibration directory.  The XML samples have detailed\n"
+         << "  comments, and you are encouraged to read and edit them.\n"
+         << "\n";
+}
+
 class Settings
 {
 public:
@@ -226,21 +250,100 @@ bool runCalibrationAndSave(Settings& s, Size imageSize, Mat&  cameraMatrix, Mat&
 
 int main(int argc, char* argv[])
 {
-    help();
-    Settings s;
-    const string inputSettingsFile = argc > 1 ? argv[1] : "default.xml";
-    FileStorage fs(inputSettingsFile, FileStorage::READ); // Read the settings
+    // help();
+
+    // Parse command-line arguments.
+    option longOptions[] = {
+        {"graphics", no_argument,       nullptr, 'g'},
+        {"output",   required_argument, nullptr, 'o'},
+        {"help",     no_argument,       nullptr, 'h'},
+        {nullptr,    0,                 nullptr, 0}
+    };
+    const char* shortOptionsString = "-go:h";
+    const int POSITIONAL_ARGUMENT = 1;
+    const int END_OF_ARGUMENTS = -1;
+    bool graphics = false;
+    string inputFile = "";
+    string outputFile = "-";
+
+    bool done = false;
+    while (!done) {
+        int c = getopt_long(argc, argv, shortOptionsString, longOptions, nullptr);
+
+        switch (c) {
+            case 'g':
+                // --graphics / -g: Enable display of processed input images.
+                graphics = true;
+                break;
+            case 'o':
+                // --output / -o: Controls the output file.
+                outputFile = optarg;
+                if (outputFile.length() == 0) {
+                    cout << "Error: No output file specified.\n";
+                    briefUsage(argv[0]);
+                    return 1;
+                }
+                break;
+            case 'h':
+                // --help / -h: Show usage information and quit.
+                usage(argv[0]);
+                return 0;
+                break;
+            case POSITIONAL_ARGUMENT:
+                // Positional arguments are input files.  We only accept one.
+                if (inputFile.length() == 0) {
+                    inputFile = optarg;
+                } else {
+                    cout << "Error: Too many input files.\n";
+                    briefUsage(argv[0]);
+                    return 1;
+                }
+                break;
+            case END_OF_ARGUMENTS:
+                done = true;
+                break;
+            default:
+                // Unrecognized argument.
+                return 1;
+        }
+    } // end (while not done)
+
+    // Process extra positional arguments that follow "--".
+    while (optind < argc) {
+        if (inputFile.length() == 0) {
+            inputFile = argv[optind];
+        } else {
+            cout << "Error: Too many input files.\n";
+            briefUsage(argv[0]);
+            return 1;
+        }
+        break;
+        optind += 1;
+    }
+
+    if (inputFile == "") {
+        cout << "Error: No input configuration file specified.\n";
+        briefUsage(argv[0]);
+        return 1;
+    }
+
+    FileStorage fs(inputFile, FileStorage::READ); // Read the settings
     if (!fs.isOpened())
     {
-        cout << "Could not open the configuration file: \"" << inputSettingsFile << "\"" << endl;
+        cout << "Error: Could not open the configuration file: \"" << inputFile << "\"" << endl;
+        briefUsage(argv[0]);
         return -1;
     }
+
+    Settings s;
+    s.outputFileName = (outputFile == "-" ? "/dev/stdout" : outputFile);
     fs["Settings"] >> s;
     fs.release();                                         // close Settings file
 
     if (!s.goodInput)
     {
-        cout << "Invalid input detected. Application stopping. " << endl;
+        cout << "Error: Invalid input detected. Application stopping." << endl;
+        briefUsage(argv[0]);
         return -1;
     }
 
@@ -349,19 +452,26 @@ int main(int argc, char* argv[])
         }
 
         //------------------------------ Show image and check for input commands -------------------
-        imshow("Image View", view);
-        char key = (char)waitKey(s.inputCapture.isOpened() ? 50 : s.delay);
+        // TODO: This part should be optional, since it forces an unnecessary
+        // run-time reference to X.  (Though the keyboard input might be part
+        // of that, too; if I disable X support, then the keyboard interaction
+        // needs to go as well.)
+        if (graphics) {
+            imshow("Image View", view);
 
-        if( key  == ESC_KEY )
-            break;
+            char key = (char)waitKey(s.inputCapture.isOpened() ? 50 : s.delay);
 
-        if( key == 'u' && mode == CALIBRATED )
-           s.showUndistorsed = !s.showUndistorsed;
+            if( key  == ESC_KEY )
+                break;
 
-        if( s.inputCapture.isOpened() && key == 'g' )
-        {
-            mode = CAPTURING;
-            imagePoints.clear();
+            if( key == 'u' && mode == CALIBRATED )
+                s.showUndistorsed = !s.showUndistorsed;
+
+            if( s.inputCapture.isOpened() && key == 'g' )
+            {
+                mode = CAPTURING;
+                imagePoints.clear();
+            }
         }
     }
 
@@ -379,10 +489,12 @@ int main(int argc, char* argv[])
             if(view.empty())
                 continue;
             remap(view, rview, map1, map2, INTER_LINEAR);
-            imshow("Image View", rview);
-            char c = (char)waitKey();
-            if( c  == ESC_KEY || c == 'q' || c == 'Q' )
-                break;
+            if (graphics) {
+                imshow("Image View", rview);
+                char c = (char)waitKey();
+                if( c  == ESC_KEY || c == 'q' || c == 'Q' )
+                    break;
+            }
         }
     }
 
