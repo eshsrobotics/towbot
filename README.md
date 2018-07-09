@@ -33,6 +33,14 @@ This is an extracurricular project that will help to sharpen the programming ski
    ``` shell
    make
    ```
+   * If you are using the Raspberry Pi, I **strongly suggest** you build with
+     the following command instead:
+     ``` shell
+     nice -n 19 make
+     ```
+     This will prevent the build from overheating the CPU and causing the
+     Raspberry Pi to crash.
+
 #### How to use the `calibrate` utility
 In addition to the other programs built by this project, you will find an
 OpenCV utility called `bin/calibrate`.  Its purpose is to analyze special
