@@ -62,6 +62,12 @@ The program will wait for keyboard input on the X display--just hit `space` or
 `enter`.  In the end, it will generate a file called `out_camera_data.xml`
 containing the calibration parameters.
 
+#### Helpful tools
+To take pictures and record video with the Logitech webcams, a number
+of tools are available.  On Linux, we have used `cheese` with some
+degree of succcess.  Search for similar tools with `apt-cache search
+webcam`.
+
 ### Python build instructions
 1. Install this project's local Python dependency packages as follows:
     pip3 install --user -r requirements.txt
